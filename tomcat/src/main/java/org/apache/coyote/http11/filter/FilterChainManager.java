@@ -11,10 +11,9 @@ public class FilterChainManager {
     private Chain initialChain;
     private Chain lastChain;
 
-
     public static FilterChainManager getInstance(){
-        if(instance == null){
-            synchronized (FilterChainManager.class){
+        if (instance == null) {
+            synchronized (FilterChainManager.class) {
                 instance = new FilterChainManager();
             }
         }
@@ -23,17 +22,18 @@ public class FilterChainManager {
 
     private FilterChainManager() {
         this.defaultChain = new Chain(new DefaultFilter());
-        initialChain = lastChain = defaultChain;
+        initialChain = defaultChain;
+        lastChain = defaultChain;
     }
 
     public void add(Filter filter) {
         Chain chain = new Chain(filter);
-        if(initialChain.equals(defaultChain)){
+        if (initialChain.equals(defaultChain)) {
             initialChain = chain;
             initialChain.next = defaultChain;
             return;
         }
-        if(lastChain.equals(defaultChain)){
+        if (lastChain.equals(defaultChain)) {
             initialChain.next = chain;
             lastChain = chain;
             lastChain.next = defaultChain;
@@ -58,7 +58,7 @@ public class FilterChainManager {
 
         @Override
         public void doFilter(Request request, Response response) {
-            if(!response.isFiltered()){
+            if (!response.isFiltered()) {
                 filter.doFilter(request, response, next);
             }
         }
